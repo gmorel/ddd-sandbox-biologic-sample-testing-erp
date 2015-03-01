@@ -1,7 +1,7 @@
 <?php
 use \mageekguy\atoum;
 
-$runner->addTestsFromDirectory(__DIR__.'/tests/Units');
+$runner->addTestsFromDirectory(__DIR__.'/test/unit');
 
 $cloverWriter = new atoum\writers\file(__DIR__.'/data/coverage.clover');
 $cloverReport = new atoum\reports\asynchronous\clover();
