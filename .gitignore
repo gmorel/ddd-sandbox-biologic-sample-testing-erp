@@ -1,12 +1,21 @@
-/web/bundles/
+# Bin
+/bin/
+
+# Symfony directories
 /app/bootstrap.php.cache
 /app/cache/*
-/app/config/parameters.yml
-/app/logs/*
 !app/cache/.gitkeep
+/app/logs/*
+
 !app/logs/.gitkeep
-/app/phpunit.xml
-/build/
+/web/bundles/
+
+# Configuration files
+/app/config/parameters.yml
+
+# Vendor
 /vendor/
-/bin/
-/composer.phar
+
+# Atoum
+/data/coverage.clover
+/web/code-coverage/*
