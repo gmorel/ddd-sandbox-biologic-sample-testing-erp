@@ -1,0 +1,26 @@
+language: php
+
+matrix:
+    include:
+        - php: 5.6
+    fast_finish: true
+
+sudo: false
+
+before_install:
+  - composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-source
+
+script:
+    - php -d memory_limit=1G $CURRENT_DIR/bin/atoum
+    - $CURRENT_DIR/bin/behat --strict --rerun=behat_errors --cache=/tmp/behat_steps_cache --format=progress test/Behavioural
+
+notifications:
+    email:
+        recipients:
+            - guillaume.morel@gmx.com
+        on_success: change
+        on_failure: change
+
