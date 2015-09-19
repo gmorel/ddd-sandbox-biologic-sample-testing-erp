@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!--Application Service has public=true. Hence is exposed in the Container-->
-        <service id="api.consumable_engine.application.service" class="Api\ConsumableEngine\Application\Service" public="true">
+        <!--UI Service has public=true. Hence is exposed in the Container-->
+        <service id="api.common.ui.response.json_response.factory" class="Api\Common\UI\Response\JsonResponseFactory" public="true">
         </service>
     </services>
 </container>
