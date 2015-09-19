@@ -20,6 +20,15 @@ use Api\ConsumableEngine\Application\Command\SetConsumableDeliveryThresholdComma
  */
 class Service
 {
+    /**
+     * @hint A Service method shall return nothing
+     *        See CQRS and QueryService Vs CommandService for ones that return something
+     *        But since we address beginners here, it is out of this sandbox scope
+     *        If you need to recover result prefer using a Repository for now
+     * @param NotifyBiologicTestHasBeenLaunchedCommand $command
+     *
+     * @throws \Api\ConsumableEngine\Application\Exception\BiologicTestNotFoundException
+     */
     public function notifyBiologicTestHasBeenLaunched(NotifyBiologicTestHasBeenLaunchedCommand $command)
     {
         // @todo implement
