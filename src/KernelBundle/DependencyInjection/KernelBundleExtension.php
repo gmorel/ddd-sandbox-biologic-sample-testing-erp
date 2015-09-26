@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Kernel\DependencyInjection;
+namespace Api\KernelBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension as BaseExtension;
 /**
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
  */
-class Extension extends BaseExtension
+class KernelBundleExtension extends BaseExtension
 {
     /**
      * {@inheritDoc}

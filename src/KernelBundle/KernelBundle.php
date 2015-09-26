@@ -1,7 +1,8 @@
 <?php
 
-namespace Api\Kernel;
+namespace Api\KernelBundle;
 
+use Api\KernelBundle\DependencyInjection\KernelBundleExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -15,6 +16,15 @@ class KernelBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
+        parent::build($container);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtension()
+    {
+        // Allow to load extension
+        return new KernelBundleExtension();
     }
 }
