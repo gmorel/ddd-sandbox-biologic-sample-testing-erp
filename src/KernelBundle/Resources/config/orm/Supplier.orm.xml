@@ -5,7 +5,7 @@
     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
     >
     <entity name="Api\ConsumableEngine\Domain\Entity\Supplier" table="supplier">
-        <id name="id" type="bigint" column="id">
+        <id name="id" type="string" column="id">
             <generator strategy="NONE" />
         </id>
 

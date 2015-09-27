@@ -7,7 +7,7 @@ namespace Api\ConsumableEngine\Domain\Entity;
  */
 class Supplier
 {
-    /** @var int */
+    /** @var string */
     private $id;
 
     /** @var string */
@@ -17,7 +17,7 @@ class Supplier
     private $consumables;
 
     /**
-     * @param int    $id
+     * @param string $id
      * @param string $name
      */
     public function __construct($id, $name)
@@ -29,7 +29,7 @@ class Supplier
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId()
     {

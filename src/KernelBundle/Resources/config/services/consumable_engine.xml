@@ -18,5 +18,19 @@
             <argument type="service" id="doctrine" />
             <argument>Api\ConsumableEngine\Domain\Entity\TestingMachine</argument>
         </service>
+
+        <service id="api.consumable_engine.infra.consumable.repository"
+                 class="Api\ConsumableEngine\Infra\Repository\ORMConsumableRepository"
+                 public="true">
+            <argument type="service" id="doctrine" />
+            <argument>Api\ConsumableEngine\Domain\Entity\Consumable</argument>
+        </service>
+
+        <service id="api.consumable_engine.infra.supplier.repository"
+                 class="Api\ConsumableEngine\Infra\Repository\ORMSupplierRepository"
+                 public="true">
+            <argument type="service" id="doctrine" />
+            <argument>Api\ConsumableEngine\Domain\Entity\Supplier</argument>
+        </service>
     </services>
 </container>
