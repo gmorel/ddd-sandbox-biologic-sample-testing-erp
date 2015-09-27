@@ -11,9 +11,10 @@
                  public="true">
         </service>
 
+        <!--Repository used in Behat Context (Tests) has public=true. Hence is exposed in the Container-->
         <service id="api.consumable_engine.infra.testing_machine.repository"
                  class="Api\ConsumableEngine\Infra\Repository\ORMTestingMachineRepository"
-                 public="false">
+                 public="true">
             <argument type="service" id="doctrine" />
             <argument>Api\ConsumableEngine\Domain\Entity\TestingMachine</argument>
         </service>
