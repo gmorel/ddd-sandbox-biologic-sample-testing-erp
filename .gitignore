@@ -12,6 +12,7 @@
 
 # Configuration files
 /app/config/parameters.yml
+/app/config/parameters_test.yml
 
 # Vendor
 /vendor/

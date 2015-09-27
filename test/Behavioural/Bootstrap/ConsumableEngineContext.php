@@ -2,6 +2,8 @@
 
 namespace Api\Test\Behavioural\Bootstrap;
 
+use Api\Common\Domain\Identity\IdentifierFactoryInterface;
+use Api\ConsumableEngine\Domain\Entity\TestingMachine;
 use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
@@ -11,23 +13,34 @@ use Behat\Behat\Tester\Exception\PendingException;
  */
 class ConsumableEngineContext implements Context
 {
+    /** @var IdentifierFactoryInterface */
+    private $identifierFactory;
+
     /** @var TestingMachineRepositoryInterface */
     private $testingMachineRepository;
 
     /**
      * Initializes context
      */
-    public function __construct(TestingMachineRepositoryInterface $testingMachineRepository)
+    public function __construct(IdentifierFactoryInterface $identifierFactory, TestingMachineRepositoryInterface $testingMachineRepository)
     {
+        $this->identifierFactory = $identifierFactory;
         $this->testingMachineRepository = $testingMachineRepository;
     }
 
     /**
-     * @Given a Testing Machine named :machineName
+     * @Given a Testing Machine named :testingMachineName
      */
-    public function aTestingMachineNamed($machineName)
+    public function aTestingMachineNamed($testingMachineName)
     {
-        throw new PendingException();
+        $testingMachineId = $this->identifierFactory->create();
+        $testingMachine = new TestingMachine(
+            $testingMachineId,
+            $testingMachineName
+
+        );
+
+        $this->testingMachineRepository->save($testingMachine);
     }
 
     /**

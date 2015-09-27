@@ -37,5 +37,6 @@ class ORMTestingMachineRepository extends AbstractDoctrineORMRepository implemen
     public function save(TestingMachine $testingMachine)
     {
         $this->getEntityManager()->persist($testingMachine);
+        $this->getEntityManager()->flush();
     }
 }

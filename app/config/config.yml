@@ -63,6 +63,12 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        mappings:
+            consumable_engine:
+                type: xml
+                dir: %kernel.root_dir%/../src/KernelBundle/Resources/config/orm
+                prefix: Api\ConsumableEngine\Domain\Entity
+                is_bundle: false
 
 # Swiftmailer Configuration
 swiftmailer:

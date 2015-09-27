@@ -4,6 +4,7 @@ default:
             paths:    [ %paths.base%/test/Behavioural/consumable_engine ]
             contexts:
                 - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
+                    identifierFactory: @api.common.infra.testing_machine_identifier.factory
                     testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository
     extensions:
         Behat\Symfony2Extension: ~

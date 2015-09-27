@@ -11,11 +11,20 @@ before_install:
   - composer self-update
 
 install:
-  - travis_retry composer install --no-interaction --prefer-source
+    - travis_retry composer install --no-interaction --prefer-source
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
+    - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
+
+before_script:
+    - php vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php
+    - php app/console doctrine:database:create -e test
+    - php app/console doctrine:schema:create --env=test
+    - app/console cache:warmup --env=test --no-debug
+
 
 script:
-    - php -d memory_limit=1G $CURRENT_DIR/bin/atoum
-    - $CURRENT_DIR/bin/behat --strict --rerun=behat_errors --cache=/tmp/behat_steps_cache --format=progress test/Behavioural
+    - php -d memory_limit=1G bin/atoum
+    - bin/behat --strict --format=progress
 
 notifications:
     email:
