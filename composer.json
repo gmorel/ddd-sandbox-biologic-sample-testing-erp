@@ -4,8 +4,14 @@
     "type": "project",
     "description": "Help learning Domain Driven Design concepts via a very documented sandbox project",
     "autoload": {
-        "psr-0": { "": "src/", "SymfonyStandard": "app/" },
-        "psr-4": { "Api\\": "src/" }
+        "psr-0": {
+            "": "src/",
+            "SymfonyStandard": "app/"
+        },
+        "psr-4": {
+            "Api\\": "src/",
+            "Api\\Test\\Behavioural\\Bootstrap\\": "test/Behavioural/Bootstrap"
+        }
     },
     "require": {
         "php": ">=5.3.3",
@@ -33,9 +39,6 @@
         "behat/mink-browserkit-driver": "~1.2"
     },
     "scripts": {
-        "post-root-package-install": [
-            "SymfonyStandard\\Composer::hookRootPackageInstall"
-        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

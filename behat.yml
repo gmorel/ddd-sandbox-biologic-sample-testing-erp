@@ -3,7 +3,8 @@ default:
         consumable_engine_features:
             paths:    [ %paths.base%/test/Behavioural/consumable_engine ]
             contexts:
-                - ConsumableEngineContext
+                - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
+                    testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository
     extensions:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:

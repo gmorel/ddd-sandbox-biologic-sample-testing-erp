@@ -1,5 +1,8 @@
 <?php
 
+namespace Api\Test\Behavioural\Bootstrap;
+
+use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 
@@ -8,12 +11,15 @@ use Behat\Behat\Tester\Exception\PendingException;
  */
 class ConsumableEngineContext implements Context
 {
+    /** @var TestingMachineRepositoryInterface */
+    private $testingMachineRepository;
+
     /**
      * Initializes context
      */
-    public function __construct()
+    public function __construct(TestingMachineRepositoryInterface $testingMachineRepository)
     {
-
+        $this->testingMachineRepository = $testingMachineRepository;
     }
 
     /**
