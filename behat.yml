@@ -6,6 +6,8 @@ default:
                 - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
                     identifierFactory: @api.common.infra.testing_machine_identifier.factory
                     testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository
+                    consumableRepository: @api.consumable_engine.infra.consumable.repository
+                    supplierRepository: @api.consumable_engine.infra.supplier.repository
     extensions:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:

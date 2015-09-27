@@ -3,7 +3,13 @@
 namespace Api\Test\Behavioural\Bootstrap;
 
 use Api\Common\Domain\Identity\IdentifierFactoryInterface;
+use Api\Common\Domain\Quantity\BaseQuantity;
+use Api\Common\Domain\Quantity\Unit;
+use Api\ConsumableEngine\Domain\Entity\Consumable;
+use Api\ConsumableEngine\Domain\Entity\Supplier;
 use Api\ConsumableEngine\Domain\Entity\TestingMachine;
+use Api\ConsumableEngine\Domain\Repository\ConsumableRepositoryInterface;
+use Api\ConsumableEngine\Domain\Repository\SupplierRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
@@ -19,35 +25,34 @@ class ConsumableEngineContext implements Context
     /** @var TestingMachineRepositoryInterface */
     private $testingMachineRepository;
 
+    /** @var ConsumableRepositoryInterface */
+    private $consumableRepository;
+
+    /** @var SupplierRepositoryInterface */
+    private $supplierRepository;
+
     /**
-     * Initializes context
+     * Initializes Behat 3 context
      */
-    public function __construct(IdentifierFactoryInterface $identifierFactory, TestingMachineRepositoryInterface $testingMachineRepository)
+    public function __construct(IdentifierFactoryInterface $identifierFactory, TestingMachineRepositoryInterface $testingMachineRepository, ConsumableRepositoryInterface $consumableRepository, SupplierRepositoryInterface $supplierRepository)
     {
         $this->identifierFactory = $identifierFactory;
         $this->testingMachineRepository = $testingMachineRepository;
+        $this->consumableRepository = $consumableRepository;
+        $this->supplierRepository = $supplierRepository;
     }
 
     /**
-     * @Given a Testing Machine named :testingMachineName
+     * @Given the Testing Machine named :testingMachineName consuming ([0-9]+)(µl|ml) of :consumableName per test tube
      */
-    public function aTestingMachineNamed($testingMachineName)
+    public function theTestingMachineNamedConsumingUlOfPerTestTube($testingMachineName, $quantity, $unit, $consumableName)
     {
-        $testingMachineId = $this->identifierFactory->create();
-        $testingMachine = new TestingMachine(
-            $testingMachineId,
-            $testingMachineName
+        $testingMachine = $this->createTestingMachine($testingMachineName);
+        if (null === $testingMachine) {
+            $testingMachine = $this->testingMachineRepository->findOneByName($testingMachineName);
+        }
 
-        );
 
-        $this->testingMachineRepository->save($testingMachine);
-    }
-
-    /**
-     * @Given the Testing Machine named :machineName consuming ([0-9]+)(µl|ml) of :consumableName per test tube
-     */
-    public function theTestingMachineNamedConsumingUlOfPerTestTube($machineName, $quantity, $unit, $consumableName)
-    {
         throw new PendingException();
     }
 
@@ -60,19 +65,21 @@ class ConsumableEngineContext implements Context
     }
 
     /**
-     * @Given the laboratory always needing at least ([0-9]+)(µl|ml) of :consumableName
+     * @Given /the laboratory always needing at least ([0-9]+)(µl|ml) of \"([^\"]+)\" delivered by \"([^\"]+)\"/
      */
-    public function theLaboratoryAlwaysNeedingAtLeastMlOf($quantity, $unit, $consumableName)
+    public function theLaboratoryAlwaysNeedingAtLeastMlOfConsumable($quantity, $unit, $consumableName, $supplierName)
     {
-        throw new PendingException();
-    }
+        $supplier = $this->supplierRepository->findOneByName($supplierName);
+        if (null === $supplier) {
+            $supplier = $this->createSupplier($supplierName);
+        }
 
-    /**
-     * @Given a supplier :supplierName providing :consumableName
-     */
-    public function aSupplierProviding($supplierName, $consumableName)
-    {
-        throw new PendingException();
+        $consumable = $this->consumableRepository->findOneByName($consumableName);
+        if (null === $consumable) {
+            $consumable = $this->createConsumable($consumableName, $quantity, $unit, $supplier);
+        }
+
+        $this->consumableRepository->save($consumable);
     }
 
     /**
@@ -121,5 +128,64 @@ class ConsumableEngineContext implements Context
     public function theSupplierIsSetToReplenishLaboratoryStocksWhenBellowMl($supplierName, $consumableName, $quantity, $unit)
     {
         throw new PendingException();
+    }
+
+    /**
+     * @param string $supplierName
+     *
+     * @return Supplier
+     */
+    private function createSupplier($supplierName)
+    {
+        $supplierId = $this->identifierFactory->create();
+        $supplier = new Supplier($supplierId, $supplierName);
+
+        $this->supplierRepository->save($supplier);
+
+        return $supplier;
+    }
+
+    /**
+     * @param string   $consumableName
+     * @param float    $deliveryThreshold
+     * @param string   $deliveryThresholdUnit
+     * @param Supplier $supplier
+     *
+     * @return Consumable
+     */
+    private function createConsumable($consumableName, $deliveryThreshold, $deliveryThresholdUnit, Supplier $supplier)
+    {
+        $consumableId = $this->identifierFactory->create();
+        $consumable = new Consumable(
+            $consumableId,
+            $consumableName,
+            new BaseQuantity(
+                $deliveryThreshold,
+                new Unit($deliveryThresholdUnit)
+            ),
+            $supplier
+        );
+
+        $this->consumableRepository->save($consumable);
+
+        return $consumable;
+    }
+
+    /**
+     * @param string $testingMachineName
+     *
+     * @return TestingMachine
+     */
+    private function createTestingMachine($testingMachineName)
+    {
+        $testingMachineId = $this->identifierFactory->create();
+        $testingMachine = new TestingMachine(
+            $testingMachineId,
+            $testingMachineName
+        );
+
+        $this->testingMachineRepository->save($testingMachine);
+
+        return $testingMachine;
     }
 }
