@@ -25,6 +25,7 @@ class JsonResponseFactory
             $headers
         );
     }
+
     /**
      * @param int    $httpCode
      * @param string $errorDescription

@@ -3,14 +3,20 @@ default:
         consumable_engine_features:
             paths:    [ %paths.base%/test/Behavioural/consumable_engine ]
             contexts:
+                - Rezzza\RestApiBehatExtension\RestApiContext
+                - Rezzza\RestApiBehatExtension\Json\JsonContext
                 - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
-                    identifierFactory: @api.common.infra.testing_machine_identifier.factory
                     testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository
                     consumableRepository: @api.consumable_engine.infra.consumable.repository
                     supplierRepository: @api.consumable_engine.infra.supplier.repository
+                    stockRepository: @api.consumable_engine.infra.stock.repository
     extensions:
         Behat\Symfony2Extension: ~
         Behat\MinkExtension:
             sessions:
                 default:
                     symfony2: ~
+        Rezzza\RestApiBehatExtension\Extension:
+            rest:
+                base_url: http://localhost:8000
+                store_response: true

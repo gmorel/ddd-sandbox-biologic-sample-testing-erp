@@ -2,6 +2,8 @@
 
 namespace Api\ConsumableEngine\Domain\Entity;
 
+use Api\Common\Domain\Quantity\BaseQuantity;
+
 /**
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
  */
@@ -14,12 +16,10 @@ class TestingMachine
     private $name;
 
     /**
-     * @param string $id
      * @param string $name
      */
-    public function __construct($id, $name)
+    public function __construct($name)
     {
-        $this->id = $id;
         $this->name = $name;
     }
 
@@ -37,5 +37,14 @@ class TestingMachine
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param BaseQuantity $baseQuantity
+     * @param Consumable   $consumable
+     */
+    public function isConsuming(BaseQuantity $baseQuantity, Consumable $consumable)
+    {
+
     }
 }

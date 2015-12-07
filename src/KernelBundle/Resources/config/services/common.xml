@@ -9,8 +9,5 @@
         <service id="api.common.ui.response.json_response.factory"
                  class="Api\Common\UI\Response\JsonResponseFactory"
                  public="true"/>
-        <service id="api.common.infra.testing_machine_identifier.factory"
-                 class="Api\Common\Infra\Identity\UniversallyUniqueIdentifierFactory"
-                 public="true"/>
     </services>
 </container>

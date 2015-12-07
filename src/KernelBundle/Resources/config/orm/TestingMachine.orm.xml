@@ -5,8 +5,8 @@
     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
     >
     <entity name="Api\ConsumableEngine\Domain\Entity\TestingMachine" table="testing_machine">
-        <id name="id" type="string" column="id">
-            <generator strategy="NONE" />
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
         </id>
 
         <field name="name" type="string" length="80" />

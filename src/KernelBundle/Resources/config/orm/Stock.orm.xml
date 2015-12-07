@@ -4,18 +4,16 @@
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
     >
-    <entity name="Api\ConsumableEngine\Domain\Entity\Supplier" table="supplier">
+    <entity name="Api\ConsumableEngine\Domain\Entity\Stock" table="stock">
         <id name="id" type="bigint" column="id">
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name" type="string" length="80" />
+        <field name="quantityValue" column="quantity_value" type="float" />
+        <field name="quantityUnit" column="quantity_unit" type="string" length="80" />
 
-        <one-to-many field="consumables" target-entity="Api\ConsumableEngine\Domain\Entity\Consumable" mapped-by="supplier">
-            <cascade>
-                <cascade-persist />
-            </cascade>
-        </one-to-many>
+        <many-to-one field="consumable" target-entity="Api\ConsumableEngine\Domain\Entity\Consumable" inversed-by="stock">
+        </many-to-one>
 
     </entity>
 </doctrine-mapping>

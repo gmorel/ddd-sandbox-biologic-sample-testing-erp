@@ -25,15 +25,16 @@ class Consumable
     /** @var Supplier */
     private $supplier;
 
+    /** @var Stock */
+    private $stock;
+
     /**
-     * @param string       $id
      * @param string       $name
      * @param BaseQuantity $deliveryThreshold
      * @param Supplier     $supplier
      */
-    public function __construct($id, $name, BaseQuantity $deliveryThreshold, Supplier $supplier)
+    public function __construct($name, BaseQuantity $deliveryThreshold, Supplier $supplier)
     {
-        $this->id = $id;
         $this->name = $name;
 
         $this->deliveryThreshold = $deliveryThreshold->getBaseValue();

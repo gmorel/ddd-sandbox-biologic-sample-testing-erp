@@ -11,18 +11,27 @@ Feature: Testing Machine notifies a Biologic Test has been launched
 
     Scenario: Successfully notify 1 Supplier to replenish stocks following a Biologic Test with 10 test tube
         # @hint Given steps are in Present Continuous (ing)
-        Given the Testing Machine named "Thermocycler" consuming 22µl of "Platinum Blue Supermix" per test tube
-        And the laboratory always needing at least 40ml of "Platinum Blue Supermix" delivered by "Invitrogen"
+        Given the laboratory always needing at least 40ml of "Platinum Blue Supermix" delivered by "Invitrogen"
+        And the Testing Machine named "Thermocycler" consuming 22µl of "Platinum Blue Supermix" per test tube
         And the laboratory already having 40220µl of "Platinum Blue Supermix" in stock
+        And the Biologic Test "Genotyping Test" being available
         # @hint When/Then steps are in Present
-        When a "Genotyping Test" is launched with 10 test tubes
-        Then the supplier "Invitrogen" should be contacted to replenish "Platinum Blue Supermix" stocks
+        When I send a POST request to "/v1/consumable/biologic-test.json"
+            """
+            {"id": "1", "nbTestTube": 10}
+            """
+        Then the response status code should be 201
+        And the supplier "Invitrogen" should be contacted to replenish "Platinum Blue Supermix" stocks
 
     Scenario: Successfully receive Biologic Test notification but don't contact Supplier to replenish stocks
         # @hint Given steps are in Present Continuous (ing)
-        Given the Testing Machine named "Thermocycler" consuming 22µl of "Platinum Blue Supermix" per test tube
-        And the laboratory always needing at least 40ml of "Platinum Blue Supermix" delivered by "Invitrogen"
+        Given the laboratory always needing at least 40ml of "Platinum Blue Supermix" delivered by "Invitrogen"
+        And the Testing Machine named "Thermocycler" consuming 22µl of "Platinum Blue Supermix" per test tube
         And the laboratory already having 40023µl of "Platinum Blue Supermix" in stock
         # @hint When/Then steps are in Present
-        When a biologist launches a "Genotyping Test" with 1 test tube
-        Then the supplier "Invitrogen" should not be contacted to replenish "Platinum Blue Supermix" stocks
+        When I send a POST request to "/v1/consumable/biologic-test.json"
+            """
+            {"id": "1", "nbTestTube": 10}
+            """
+        Then the response status code should be 201
+        And the supplier "Invitrogen" should not be contacted to replenish "Platinum Blue Supermix" stocks

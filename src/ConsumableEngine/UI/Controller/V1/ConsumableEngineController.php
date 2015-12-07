@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ConsumableEngineController extends Controller
 {
     /**
-     * @Route("/notify/biologic-test-launched.json")
+     * @Route("/biologic-test.json")
      * @Method("POST")
      */
     public function postNotifyBiologicTestLaunchedAction(Request $request)

@@ -37,8 +37,10 @@
         "behat/symfony2-extension": "~2.0",
         "behat/mink": "~1.6",
         "behat/mink-extension": "~2.0",
-        "behat/mink-browserkit-driver": "~1.2"
+        "behat/mink-browserkit-driver": "~1.2",
+        "rezzza/rest-api-behat-extension": "~2.1"
     },
+
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

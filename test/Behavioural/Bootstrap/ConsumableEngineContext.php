@@ -2,26 +2,25 @@
 
 namespace Api\Test\Behavioural\Bootstrap;
 
-use Api\Common\Domain\Identity\IdentifierFactoryInterface;
 use Api\Common\Domain\Quantity\BaseQuantity;
 use Api\Common\Domain\Quantity\Unit;
 use Api\ConsumableEngine\Domain\Entity\Consumable;
+use Api\ConsumableEngine\Domain\Entity\Stock;
 use Api\ConsumableEngine\Domain\Entity\Supplier;
 use Api\ConsumableEngine\Domain\Entity\TestingMachine;
 use Api\ConsumableEngine\Domain\Repository\ConsumableRepositoryInterface;
+use Api\ConsumableEngine\Domain\Repository\StockRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\SupplierRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 
 /**
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
  */
-class ConsumableEngineContext implements Context
+class ConsumableEngineContext implements Context, SnippetAcceptingContext
 {
-    /** @var IdentifierFactoryInterface */
-    private $identifierFactory;
-
     /** @var TestingMachineRepositoryInterface */
     private $testingMachineRepository;
 
@@ -31,19 +30,22 @@ class ConsumableEngineContext implements Context
     /** @var SupplierRepositoryInterface */
     private $supplierRepository;
 
+    /** @var StockRepositoryInterface */
+    private $stockRepository;
+
     /**
      * Initializes Behat 3 context
      */
-    public function __construct(IdentifierFactoryInterface $identifierFactory, TestingMachineRepositoryInterface $testingMachineRepository, ConsumableRepositoryInterface $consumableRepository, SupplierRepositoryInterface $supplierRepository)
+    public function __construct(TestingMachineRepositoryInterface $testingMachineRepository, ConsumableRepositoryInterface $consumableRepository, SupplierRepositoryInterface $supplierRepository, StockRepositoryInterface $stockRepository)
     {
-        $this->identifierFactory = $identifierFactory;
         $this->testingMachineRepository = $testingMachineRepository;
         $this->consumableRepository = $consumableRepository;
         $this->supplierRepository = $supplierRepository;
+        $this->stockRepository = $stockRepository;
     }
 
     /**
-     * @Given the Testing Machine named :testingMachineName consuming ([0-9]+)(µl|ml) of :consumableName per test tube
+     * @Given /the Testing Machine named \"(?P<testingMachineName>[^\"]+)\" consuming ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" per test tube/
      */
     public function theTestingMachineNamedConsumingUlOfPerTestTube($testingMachineName, $quantity, $unit, $consumableName)
     {
@@ -52,20 +54,43 @@ class ConsumableEngineContext implements Context
             $testingMachine = $this->testingMachineRepository->findOneByName($testingMachineName);
         }
 
+        $consumable = $this->consumableRepository->findOneByName($consumableName);
+        if (null === $consumable) {
+            throw new \LogicException('A consumable needs to be created before using this step.');
+        }
 
-        throw new PendingException();
+        $quantity = new BaseQuantity(
+            $quantity,
+            new Unit($unit)
+        );
+
+        $testingMachine->isConsuming($quantity, $consumable);
+
+        $this->testingMachineRepository->save($testingMachine);
     }
 
     /**
-     * @Given the laboratory already having ([0-9]+)(µl|ml) of :consumableName in stock
+     * @Given /the laboratory already having ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" in stock/
      */
     public function theLaboratoryAlreadyHavingUlOfInStock($quantity, $unit, $consumableName)
     {
-        throw new PendingException();
+        $consumable = $this->consumableRepository->findOneByName($consumableName);
+        if (null === $consumable) {
+            throw new \LogicException('A consumable needs to be created before using this step.');
+        }
+
+        $quantity = new BaseQuantity(
+            $quantity,
+            new Unit($unit)
+        );
+
+        $stock = new Stock($quantity, $consumable);
+
+        $this->stockRepository->save($stock);
     }
 
     /**
-     * @Given /the laboratory always needing at least ([0-9]+)(µl|ml) of \"([^\"]+)\" delivered by \"([^\"]+)\"/
+     * @Given /the laboratory always needing at least ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" delivered by \"(?P<supplierName>[^\"]+)\"/
      */
     public function theLaboratoryAlwaysNeedingAtLeastMlOfConsumable($quantity, $unit, $consumableName, $supplierName)
     {
@@ -83,11 +108,10 @@ class ConsumableEngineContext implements Context
     }
 
     /**
-     * @When a(n) :biologicTestName is launched with ([0-9]+) test tubes?
+     * @Given the Biologic Test :biologicTestName being available
      */
-    public function aIsLaunchedWithTestTubes($biologicTestName, $nbTestTube)
+    public function theBiologicTestBeingAvailable($biologicTestName)
     {
-        throw new PendingException();
     }
 
     /**
@@ -137,8 +161,7 @@ class ConsumableEngineContext implements Context
      */
     private function createSupplier($supplierName)
     {
-        $supplierId = $this->identifierFactory->create();
-        $supplier = new Supplier($supplierId, $supplierName);
+        $supplier = new Supplier($supplierName);
 
         $this->supplierRepository->save($supplier);
 
@@ -155,9 +178,7 @@ class ConsumableEngineContext implements Context
      */
     private function createConsumable($consumableName, $deliveryThreshold, $deliveryThresholdUnit, Supplier $supplier)
     {
-        $consumableId = $this->identifierFactory->create();
         $consumable = new Consumable(
-            $consumableId,
             $consumableName,
             new BaseQuantity(
                 $deliveryThreshold,
@@ -178,9 +199,7 @@ class ConsumableEngineContext implements Context
      */
     private function createTestingMachine($testingMachineName)
     {
-        $testingMachineId = $this->identifierFactory->create();
         $testingMachine = new TestingMachine(
-            $testingMachineId,
             $testingMachineName
         );
 

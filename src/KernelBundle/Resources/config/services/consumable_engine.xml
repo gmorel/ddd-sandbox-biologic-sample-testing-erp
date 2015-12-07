@@ -26,6 +26,13 @@
             <argument>Api\ConsumableEngine\Domain\Entity\Consumable</argument>
         </service>
 
+        <service id="api.consumable_engine.infra.stock.repository"
+                 class="Api\ConsumableEngine\Infra\Repository\ORMStockRepository"
+                 public="true">
+            <argument type="service" id="doctrine" />
+            <argument>Api\ConsumableEngine\Domain\Entity\Stock</argument>
+        </service>
+
         <service id="api.consumable_engine.infra.supplier.repository"
                  class="Api\ConsumableEngine\Infra\Repository\ORMSupplierRepository"
                  public="true">

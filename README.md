@@ -75,6 +75,13 @@ And in avoiding misunderstandings between
 - Developers and Domain experts
 - Developers and Developers
 
+## Run Functional Tests
+
+> $ php app/console server:start localhost:8000
+
+> $ vendor/bin/behat
+
+
 ## Credits
 
 [Timothée Barray (@tyx)](https://github.com/tyx) - Software Architect at VeryLastRoom - for the overall DDD project structure.

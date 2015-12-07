@@ -10,7 +10,7 @@ use Api\Common\Domain\Quantity\Unit;
  * @hint Entity
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
  */
-class Consumption
+class EffectiveConsumption
 {
     /** @var BiologicTest */
     private $biologicTest;
@@ -47,7 +47,7 @@ class Consumption
      */
     public static function consume(Consumable $consumable, BiologicTest $biologicTest, BaseQuantity $quantity)
     {
-        return new static(
+        return new self(
             $biologicTest,
             $consumable,
             $quantity->getBaseValue(),
