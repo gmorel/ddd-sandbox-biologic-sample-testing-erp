@@ -79,7 +79,7 @@ And in avoiding misunderstandings between
 
 > $ php app/console server:start localhost:8000
 
-> $ vendor/bin/behat
+> $ bin/behat
 
 
 ## Credits
