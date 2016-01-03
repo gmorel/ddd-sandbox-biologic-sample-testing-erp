@@ -12,19 +12,19 @@ use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 class ORMTestingMachineRepository extends AbstractDoctrineORMRepository implements TestingMachineRepositoryInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function find($testingMachineId)
     {
-        return $this->getRepository()->find($testingMachineId);
+        return $this->getInternalRepository()->find($testingMachineId);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function findOneByName($testingMachineName)
     {
-        return $this->getRepository()->findOneBy(
+        return $this->getInternalRepository()->findOneBy(
             [
                 'name' => $testingMachineName
             ]
@@ -32,7 +32,7 @@ class ORMTestingMachineRepository extends AbstractDoctrineORMRepository implemen
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function save(TestingMachine $testingMachine)
     {

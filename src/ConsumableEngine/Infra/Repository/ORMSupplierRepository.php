@@ -12,19 +12,19 @@ use Api\ConsumableEngine\Domain\Repository\SupplierRepositoryInterface;
 class ORMSupplierRepository extends AbstractDoctrineORMRepository implements SupplierRepositoryInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function find($supplierId)
     {
-        return $this->getRepository()->find($supplierId);
+        return $this->getInternalRepository()->find($supplierId);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function findOneByName($supplierName)
     {
-        return $this->getRepository()->findOneBy(
+        return $this->getInternalRepository()->findOneBy(
             [
                 'name' => $supplierName
             ]
@@ -32,7 +32,7 @@ class ORMSupplierRepository extends AbstractDoctrineORMRepository implements Sup
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function save(Supplier $supplier)
     {
