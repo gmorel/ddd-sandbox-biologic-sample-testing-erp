@@ -4,16 +4,11 @@
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
     >
-    <entity name="Api\ConsumableEngine\Domain\Entity\Stock" table="stock">
-        <id name="id" type="bigint" column="id">
-            <generator strategy="AUTO" />
-        </id>
-
+    <embeddable name="Api\ConsumableEngine\Domain\Entity\Stock">
         <field name="quantityValue" column="quantity_value" type="float" />
         <field name="quantityUnit" column="quantity_unit" type="string" length="80" />
-
-        <many-to-one field="consumable" target-entity="Api\ConsumableEngine\Domain\Entity\Consumable" inversed-by="stock">
-        </many-to-one>
-
-    </entity>
+        <field name="lastTimeReplenished" column="last_time_replenished" type="datetime" nullable="true"/>
+        <field name="deliveryThresholdValue" column="delivery_threshold_value" type="decimal" scale="2" precision="18" nullable="true" />
+        <field name="deliveryThresholdUnit" column="delivery_threshold_unit" type="string" length="10" nullable="true" />
+    </embeddable>
 </doctrine-mapping>
