@@ -6,7 +6,7 @@ use Api\Common\Domain\Quantity\BaseQuantity;
 use Api\Common\Domain\Quantity\Unit;
 
 /**
- * Consumption of one Consumable during a BiologicTest
+ * Consumption of one type of Consumable during a BiologicTest
  * @hint Entity
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
  */
@@ -15,44 +15,31 @@ class Consumption
     /** @var BiologicTest */
     private $biologicTest;
 
+    /** @var TestingMachine */
+    private $testingMachine;
+
     /** @var Consumable */
     private $consumable;
 
     /** @var float */
-    private $quantityAmount;
+    private $quantityValue;
 
     /** @var string */
     private $quantityUnit;
 
     /**
      * @param BiologicTest $biologicTest
-     * @param Consumable   $consumable
-     * @param float        $quantityAmount
-     * @param string       $quantityUnit
+     * @param TestingMachine $testingMachine
+     * @param Consumable $consumable
+     * @param BaseQuantity $quantity
      */
-    private function __construct(BiologicTest $biologicTest, Consumable $consumable, $quantityAmount, $quantityUnit)
+    public function __construct(BiologicTest $biologicTest, TestingMachine $testingMachine, Consumable $consumable, BaseQuantity $quantity)
     {
         $this->biologicTest = $biologicTest;
+        $this->testingMachine = $testingMachine;
         $this->consumable = $consumable;
-        $this->quantityAmount = $quantityAmount;
-        $this->quantityUnit = $quantityUnit;
-    }
-
-    /**
-     * @param Consumable   $consumable
-     * @param BiologicTest $biologicTest
-     * @param BaseQuantity $quantity
-     *
-     * @return $this
-     */
-    public static function consume(Consumable $consumable, BiologicTest $biologicTest, BaseQuantity $quantity)
-    {
-        return new static(
-            $biologicTest,
-            $consumable,
-            $quantity->getBaseValue(),
-            $quantity->getBaseUnit()->getValue()
-        );
+        $this->quantityValue = $quantity->getBaseValue();
+        $this->quantityUnit = $quantity->getBaseUnit()->getValue();
     }
 
     /**
@@ -81,7 +68,7 @@ class Consumption
     public function getQuantityConsumed()
     {
         return new BaseQuantity(
-            $this->quantityAmount,
+            $this->quantityValue,
             new Unit($this->quantityUnit)
         );
     }

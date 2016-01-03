@@ -9,11 +9,15 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name" type="string" length="80" />
+        <field name="name" type="string" length="80"  unique="true" />
 
-        <field name="deliveryThreshold" column="delivery_threshold" type="decimal" scale="2" precision="18" nullable="true" />
+        <embedded name="stock" class="Api\ConsumableEngine\Domain\Entity\Stock" column-prefix="stock_" />
 
-        <field name="deliveryThresholdUnit" column="delivery_threshold_unit" type="string" length="10" nullable="true" />
+        <one-to-many field="consumptions" target-entity="Api\ConsumableEngine\Domain\Entity\Consumption" mapped-by="consumable">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
 
         <many-to-one field="supplier" target-entity="Api\ConsumableEngine\Domain\Entity\Supplier" inversed-by="consumables">
             <cascade />

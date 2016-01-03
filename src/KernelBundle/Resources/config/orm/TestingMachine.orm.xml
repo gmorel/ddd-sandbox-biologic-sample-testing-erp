@@ -9,6 +9,12 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name" type="string" length="80" />
+        <field name="name" type="string" length="80" unique="true" />
+
+        <one-to-many field="consumptions" target-entity="Api\ConsumableEngine\Domain\Entity\Consumption" mapped-by="consumable">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>
