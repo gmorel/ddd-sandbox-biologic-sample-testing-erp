@@ -9,5 +9,12 @@
         <service id="api.common.ui.response.json_response.factory"
                  class="Api\Common\UI\Response\JsonResponseFactory"
                  public="true"/>
+
+        <service id="api.common.infra.event.event_bus"
+                 class="Api\Common\Infra\Event\SymfonyEventBus"
+                 public="false">
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="logger" />
+        </service>
     </services>
 </container>
