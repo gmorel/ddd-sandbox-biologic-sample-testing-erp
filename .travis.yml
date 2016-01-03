@@ -21,7 +21,6 @@ before_script:
     - php app/console doctrine:schema:create --env=test
     - app/console cache:warmup --env=test --no-debug
 
-
 script:
     - php -d memory_limit=1G bin/atoum
     - bin/behat --strict --format=progress

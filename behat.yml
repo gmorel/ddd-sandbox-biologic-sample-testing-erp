@@ -7,10 +7,10 @@ default:
                 - Rezzza\RestApiBehatExtension\Json\JsonContext
                 - Api\Test\Behavioural\Bootstrap\DebugContext
                 - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
-                    testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository
-                    consumableRepository: @api.consumable_engine.infra.consumable.repository
-                    supplierRepository: @api.consumable_engine.infra.supplier.repository
-                    stockRepository: @api.consumable_engine.infra.stock.repository
+                    testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository.orm
+                    consumableRepository: @api.consumable_engine.infra.consumable.repository.orm
+                    supplierRepository: @api.consumable_engine.infra.supplier.repository.orm
+                    biologicTestRepository: @api.consumable_engine.infra.biologic_test.repository.orm
     extensions:
         Behat\Symfony2Extension: ~
         Rezzza\RestApiBehatExtension\Extension:

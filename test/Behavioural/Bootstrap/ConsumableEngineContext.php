@@ -4,12 +4,12 @@ namespace Api\Test\Behavioural\Bootstrap;
 
 use Api\Common\Domain\Quantity\BaseQuantity;
 use Api\Common\Domain\Quantity\Unit;
+use Api\ConsumableEngine\Domain\Entity\BiologicTest;
 use Api\ConsumableEngine\Domain\Entity\Consumable;
-use Api\ConsumableEngine\Domain\Entity\Stock;
 use Api\ConsumableEngine\Domain\Entity\Supplier;
 use Api\ConsumableEngine\Domain\Entity\TestingMachine;
+use Api\ConsumableEngine\Domain\Repository\BiologicTestRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\ConsumableRepositoryInterface;
-use Api\ConsumableEngine\Domain\Repository\StockRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\SupplierRepositoryInterface;
 use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
@@ -30,24 +30,24 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
     /** @var SupplierRepositoryInterface */
     private $supplierRepository;
 
-    /** @var StockRepositoryInterface */
-    private $stockRepository;
+    /** @var BiologicTestRepositoryInterface */
+    private $biologicTestRepository;
 
     /**
      * Initializes Behat 3 context
      */
-    public function __construct(TestingMachineRepositoryInterface $testingMachineRepository, ConsumableRepositoryInterface $consumableRepository, SupplierRepositoryInterface $supplierRepository, StockRepositoryInterface $stockRepository)
+    public function __construct(TestingMachineRepositoryInterface $testingMachineRepository, ConsumableRepositoryInterface $consumableRepository, SupplierRepositoryInterface $supplierRepository, BiologicTestRepositoryInterface $biologicTestRepository)
     {
         $this->testingMachineRepository = $testingMachineRepository;
         $this->consumableRepository = $consumableRepository;
         $this->supplierRepository = $supplierRepository;
-        $this->stockRepository = $stockRepository;
+        $this->biologicTestRepository = $biologicTestRepository;
     }
 
     /**
-     * @Given /the Testing Machine named \"(?P<testingMachineName>[^\"]+)\" consuming ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" per test tube/
+     * @Given /the Testing Machine named \"(?P<testingMachineName>[^\"]+)\" consuming ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" per Biologic Test \"(?P<biologicTestName>[^\"]+)\"/
      */
-    public function theTestingMachineNamedConsumingUlOfPerTestTube($testingMachineName, $quantity, $unit, $consumableName)
+    public function theTestingMachineNamedConsumingUlOfPerBiologicTest($testingMachineName, $quantity, $unit, $consumableName, $biologicTestName)
     {
         $testingMachine = $this->createTestingMachine($testingMachineName);
         if (null === $testingMachine) {
@@ -59,13 +59,17 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
             throw new \LogicException('A consumable needs to be created before using this step.');
         }
 
+        $biologicTest = $this->biologicTestRepository->findOneByName($biologicTestName);
+        if (null === $biologicTest) {
+            $biologicTest = $this->createBiologicTest($biologicTestName);
+        }
+
         $quantity = new BaseQuantity(
             $quantity,
             new Unit($unit)
         );
 
-        $testingMachine->isConsuming($quantity, $consumable);
-
+        $testingMachine->isConsuming($biologicTest, $quantity, $consumable);
         $this->testingMachineRepository->save($testingMachine);
     }
 
@@ -79,14 +83,14 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
             throw new \LogicException('A consumable needs to be created before using this step.');
         }
 
-        $quantity = new BaseQuantity(
-            $quantity,
-            new Unit($unit)
+        $consumable->getStock()->replenish(
+            new BaseQuantity(
+                $quantity,
+                new Unit($unit)
+            )
         );
 
-        $stock = new Stock($quantity, $consumable);
-
-        $this->stockRepository->save($stock);
+        $this->consumableRepository->save($consumable);
     }
 
     /**
@@ -105,13 +109,6 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
         }
 
         $this->consumableRepository->save($consumable);
-    }
-
-    /**
-     * @Given the Biologic Test :biologicTestName being available
-     */
-    public function theBiologicTestBeingAvailable($biologicTestName)
-    {
     }
 
     /**
@@ -206,5 +203,20 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
         $this->testingMachineRepository->save($testingMachine);
 
         return $testingMachine;
+    }
+
+    /**
+     * @param string $biologicTestName
+     * @return BiologicTest
+     */
+    private function createBiologicTest($biologicTestName)
+    {
+        $biologicTest = new BiologicTest(
+            $biologicTestName
+        );
+
+        $this->biologicTestRepository->save($biologicTest);
+
+        return $biologicTest;
     }
 }
