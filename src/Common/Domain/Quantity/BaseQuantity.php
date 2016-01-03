@@ -53,6 +53,14 @@ class BaseQuantity
         return $this->baseUnit;
     }
 
+     /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return sprintf('%s%s', $this->baseValue, $this->baseUnit->getValue());
+    }
+
     /**
      * @param $baseValue
      */
