@@ -30,14 +30,14 @@ class ConsumableEngineController extends Controller
         $form = $this->createForm(new NotifyBiologicTestHasBeenLaunchedFormType(), $command);
         $form->handleRequest($request);
 
-         if (false === $form->isValid()) {
+        if (false === $form->isValid()) {
             // @hint UI validation failed, no need to enter in the domain yet
             return $this->get('api.common.ui.response.json_response.factory')->createErrorJsonResponseForProperty(
                 JsonResponse::HTTP_NOT_ACCEPTABLE,
                 (string) $form->getErrors(),
-                $form->getErrors()->current()->getOrigin()->getName()
+               $form->getErrors()->current() ? $form->getErrors()->current()->getOrigin()->getName() : null
             );
-         }
+        }
 
         try {
             // @hint our Application entry point leading to our Domain
