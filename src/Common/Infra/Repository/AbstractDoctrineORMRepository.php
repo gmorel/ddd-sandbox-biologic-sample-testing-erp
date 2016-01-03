@@ -27,12 +27,13 @@ abstract class AbstractDoctrineORMRepository
     }
 
     /**
-     * Don't put repository instantiation in __construct
-     * As it is hydrating all mapping even if not used
+     * Prefer using this method instead of building internal repository in constructor
+     * - Avoid Doctrine to load all mapping
+     * - Avoid Doctrine to use a closed connection
      *
      * @return \Doctrine\ORM\EntityRepository
      */
-    protected function getRepository()
+    protected function getInternalRepository()
     {
         return $this->getEntityManager()->getRepository($this->entityFullClassName);
     }
