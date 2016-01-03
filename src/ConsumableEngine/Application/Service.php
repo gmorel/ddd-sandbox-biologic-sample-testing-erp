@@ -4,6 +4,9 @@ namespace Api\ConsumableEngine\Application;
 
 use Api\ConsumableEngine\Application\Command\NotifyBiologicTestHasBeenLaunchedCommand;
 use Api\ConsumableEngine\Application\Command\SetConsumableDeliveryThresholdCommand;
+use Api\ConsumableEngine\Application\Exception\BiologicTestNotFoundException;
+use Api\ConsumableEngine\Domain\Repository\BiologicTestRepositoryInterface;
+use Api\ConsumableEngine\Domain\Repository\ConsumableRepositoryInterface;
 
 /**
  * @hint Represents how each feature are orchestrated at a macro level
@@ -20,6 +23,18 @@ use Api\ConsumableEngine\Application\Command\SetConsumableDeliveryThresholdComma
  */
 class Service
 {
+    /** @var BiologicTestRepositoryInterface */
+    private $biologicTestRepository;
+
+    /** @var ConsumableRepositoryInterface */
+    private $consumableRepository;
+
+    public function __construct(BiologicTestRepositoryInterface $biologicTestRepository, ConsumableRepositoryInterface $consumableRepository)
+    {
+        $this->biologicTestRepository = $biologicTestRepository;
+        $this->consumableRepository = $consumableRepository;
+    }
+
     /**
      * @hint A Service method shall return nothing
      *        See CQRS and QueryService Vs CommandService for ones that return something
@@ -31,11 +46,38 @@ class Service
      */
     public function notifyBiologicTestHasBeenLaunched(NotifyBiologicTestHasBeenLaunchedCommand $command)
     {
-        // @todo implement
+        $biologicTest = $this->biologicTestRepository->find($command->biologicTestId);
+
+        $this->guardAgainstBiologicTestNotFound($command, $biologicTest);
+
+        foreach ($biologicTest->getConsumptions() as $consumption) {
+            $consumption->getConsumed()->getStock()->consume(
+                $consumption->getQuantityConsumed()
+            );
+
+            // @hint Repository will call Event Bus with any Domain Event found
+            //       Event Bus will then call Symfony Event Dispatcher
+            //       These events will then be able to be intercepted by any Bounded Context
+            $this->consumableRepository->save(
+                $consumption->getConsumed()
+            );
+        }
     }
 
     public function setConsumableDeliveryThreshold(SetConsumableDeliveryThresholdCommand $command)
     {
         // @todo implement
+    }
+
+    /**
+     * @param NotifyBiologicTestHasBeenLaunchedCommand $command
+     * @param $biologicTest
+     * @throws BiologicTestNotFoundException
+     */
+    private function guardAgainstBiologicTestNotFound(NotifyBiologicTestHasBeenLaunchedCommand $command, $biologicTest)
+    {
+        if (null === $biologicTest) {
+            throw BiologicTestNotFoundException::fromBiologicTestId($command->biologicTestId);
+        }
     }
 }

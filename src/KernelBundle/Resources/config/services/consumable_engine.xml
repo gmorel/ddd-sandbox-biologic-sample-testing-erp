@@ -9,35 +9,38 @@
         <service id="api.consumable_engine.application.service"
                  class="Api\ConsumableEngine\Application\Service"
                  public="true">
+            <argument type="service" id="api.consumable_engine.infra.biologic_test.repository.orm" />
+            <argument type="service" id="api.consumable_engine.infra.consumable.repository.orm" />
         </service>
 
         <!--Repository used in Behat Context (Tests) has public=true. Hence is exposed in the Container-->
-        <service id="api.consumable_engine.infra.testing_machine.repository"
+        <service id="api.consumable_engine.infra.testing_machine.repository.orm"
                  class="Api\ConsumableEngine\Infra\Repository\ORMTestingMachineRepository"
                  public="true">
             <argument type="service" id="doctrine" />
             <argument>Api\ConsumableEngine\Domain\Entity\TestingMachine</argument>
         </service>
 
-        <service id="api.consumable_engine.infra.consumable.repository"
+        <service id="api.consumable_engine.infra.consumable.repository.orm"
                  class="Api\ConsumableEngine\Infra\Repository\ORMConsumableRepository"
                  public="true">
             <argument type="service" id="doctrine" />
             <argument>Api\ConsumableEngine\Domain\Entity\Consumable</argument>
+            <argument type="service" id="api.common.infra.event.event_bus" />
         </service>
 
-        <service id="api.consumable_engine.infra.stock.repository"
-                 class="Api\ConsumableEngine\Infra\Repository\ORMStockRepository"
-                 public="true">
-            <argument type="service" id="doctrine" />
-            <argument>Api\ConsumableEngine\Domain\Entity\Stock</argument>
-        </service>
-
-        <service id="api.consumable_engine.infra.supplier.repository"
+        <service id="api.consumable_engine.infra.supplier.repository.orm"
                  class="Api\ConsumableEngine\Infra\Repository\ORMSupplierRepository"
                  public="true">
             <argument type="service" id="doctrine" />
             <argument>Api\ConsumableEngine\Domain\Entity\Supplier</argument>
+        </service>
+
+        <service id="api.consumable_engine.infra.biologic_test.repository.orm"
+                 class="Api\ConsumableEngine\Infra\Repository\ORMBiologicTestRepository"
+                 public="true">
+            <argument type="service" id="doctrine" />
+            <argument>Api\ConsumableEngine\Domain\Entity\BiologicTest</argument>
         </service>
     </services>
 </container>
