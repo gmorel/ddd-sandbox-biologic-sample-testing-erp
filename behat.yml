@@ -13,6 +13,8 @@ default:
                     biologicTestRepository: @api.consumable_engine.infra.biologic_test.repository.orm
     extensions:
         Behat\Symfony2Extension: ~
+        Rezzza\AliceExtension\Extension:
+            lifetime: scenario
         Rezzza\RestApiBehatExtension\Extension:
             rest:
                 base_url: http://localhost:8000

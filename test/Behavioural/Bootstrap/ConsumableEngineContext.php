@@ -15,6 +15,7 @@ use Api\ConsumableEngine\Domain\Repository\TestingMachineRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 
 /**
  * @author Guillaume MOREL <guillaume.morel@verylastroom.com>
@@ -43,6 +44,15 @@ class ConsumableEngineContext implements Context, SnippetAcceptingContext
         $this->supplierRepository = $supplierRepository;
         $this->biologicTestRepository = $biologicTestRepository;
     }
+
+    /**
+     * @BeforeSuite
+     */
+     public static function prepare(BeforeSuiteScope $scope)
+     {
+         // prepare system for test suite
+         // before it runs
+     }
 
     /**
      * @Given /the Testing Machine named \"(?P<testingMachineName>[^\"]+)\" consuming ([0-9]+)(µl|ml) of \"(?P<consumableName>[^\"]+)\" per Biologic Test \"(?P<biologicTestName>[^\"]+)\"/
