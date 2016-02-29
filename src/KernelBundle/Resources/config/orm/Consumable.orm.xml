@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+    >
+    <entity name="Api\ConsumableEngine\Domain\Entity\Consumable" table="consumable">
+        <id name="id" type="bigint" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="name" type="string" length="80"  unique="true" />
+
+        <embedded name="stock" class="Api\ConsumableEngine\Domain\Entity\Stock" column-prefix="stock_" />
+
+        <one-to-many field="consumptions" target-entity="Api\ConsumableEngine\Domain\Entity\Consumption" mapped-by="consumable">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+
+        <many-to-one field="supplier" target-entity="Api\ConsumableEngine\Domain\Entity\Supplier" inversed-by="consumables">
+            <cascade />
+            <join-column name="consumable_id" referenced-column-name="id" nullable="false" />
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

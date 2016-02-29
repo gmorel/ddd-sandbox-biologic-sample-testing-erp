@@ -1,0 +1,22 @@
+# Bin
+/bin/
+
+# Symfony directories
+/app/bootstrap.php.cache
+/app/cache/*
+!app/cache/.gitkeep
+/app/logs/*
+
+!app/logs/.gitkeep
+/web/bundles/
+
+# Configuration files
+/app/config/parameters.yml
+/app/config/parameters_test.yml
+
+# Vendor
+/vendor/
+
+# Atoum
+/data/coverage.clover
+/web/code-coverage/*

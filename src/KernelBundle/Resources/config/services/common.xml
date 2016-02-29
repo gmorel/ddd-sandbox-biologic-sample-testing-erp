@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!--UI Service has public=true. Hence is exposed in the Container-->
+        <service id="api.common.ui.response.json_response.factory"
+                 class="Api\Common\UI\Response\JsonResponseFactory"
+                 public="true"/>
+
+        <service id="api.common.infra.event.event_bus"
+                 class="Api\Common\Infra\Event\SymfonyEventBus"
+                 public="false">
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="logger" />
+        </service>
+    </services>
+</container>

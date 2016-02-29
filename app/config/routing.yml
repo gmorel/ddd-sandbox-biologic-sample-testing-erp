@@ -1,0 +1,2 @@
+consumable_engine:
+    resource: "@KernelBundle/Resources/config/routing/consumable_engine.yml"

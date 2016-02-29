@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+    >
+    <entity name="Api\ConsumableEngine\Domain\Entity\BiologicTest" table="biologic_test">
+        <id name="id" type="bigint" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="name" type="string" length="80" unique="true" />
+
+        <one-to-many field="consumptions" target-entity="Api\ConsumableEngine\Domain\Entity\Consumption" mapped-by="biologicTest">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+
+    </entity>
+</doctrine-mapping>

@@ -1,0 +1,2 @@
+consummable_engine:
+    resource: Api\ConsumableEngine\UI\Controller\V1\ConsumableEngineController

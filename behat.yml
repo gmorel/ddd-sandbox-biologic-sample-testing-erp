@@ -1,0 +1,22 @@
+default:
+    suites:
+        consumable_engine_features:
+            paths:    [ %paths.base%/test/Behavioural/consumable_engine ]
+            contexts:
+                - Rezzza\RestApiBehatExtension\RestApiContext
+                - Rezzza\RestApiBehatExtension\Json\JsonContext
+                - Api\Test\Behavioural\Bootstrap\DebugContext
+                - Api\Test\Behavioural\Bootstrap\ConsumableEngineContext:
+                    testingMachineRepository: @api.consumable_engine.infra.testing_machine.repository.orm
+                    consumableRepository: @api.consumable_engine.infra.consumable.repository.orm
+                    supplierRepository: @api.consumable_engine.infra.supplier.repository.orm
+                    biologicTestRepository: @api.consumable_engine.infra.biologic_test.repository.orm
+    extensions:
+        Behat\Symfony2Extension: ~
+        Rezzza\AliceExtension\Extension:
+            lifetime: scenario
+        Rezzza\RestApiBehatExtension\Extension:
+            rest:
+                base_url: http://localhost:8000
+                store_response: true
+                adaptor_name: curl

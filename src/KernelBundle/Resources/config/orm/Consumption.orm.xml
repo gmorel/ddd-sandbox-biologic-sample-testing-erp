@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+    >
+    <entity name="Api\ConsumableEngine\Domain\Entity\Consumption" table="consumption">
+
+        <id name="testingMachine" association-key="true" />
+        <id name="biologicTest" association-key="true" />
+        <id name="consumable" association-key="true" />
+
+        <field name="quantityValue" column="quantity_value" type="float" />
+        <field name="quantityUnit" column="quantity_unit" type="string" length="80" />
+
+        <many-to-one field="testingMachine" target-entity="Api\ConsumableEngine\Domain\Entity\TestingMachine" inversed-by="consumptions">
+            <join-column name="testing_machine_id" referenced-column-name="id" />
+        </many-to-one>
+
+        <many-to-one field="biologicTest" target-entity="Api\ConsumableEngine\Domain\Entity\BiologicTest" inversed-by="consumptions">
+            <join-column name="biologic_test_id" referenced-column-name="id" />
+        </many-to-one>
+
+        <many-to-one field="consumable" target-entity="Api\ConsumableEngine\Domain\Entity\Consumable" inversed-by="consumptions">
+            <join-column name="consumable_id" referenced-column-name="id" />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>
